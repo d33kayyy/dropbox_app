@@ -20,7 +20,7 @@ import com.dropbox.client2.android.AuthActivity;
 import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.AppKeyPair;
 
-public class Login extends AppCompatActivity {
+public class Login extends Activity {
     // APP SETUP
     private static final String APP_KEY = "y0ygis4rmdsx4jr";
     private static final String APP_SECRET = "n4ucuqeqi91xhxp";
@@ -31,9 +31,6 @@ public class Login extends AppCompatActivity {
 
     public final String LOG_TAG = Login.class.getSimpleName();
     private DropboxAPI<AndroidAuthSession> mApi;
-
-    // UI components
-    private Button btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +45,7 @@ public class Login extends AppCompatActivity {
 
         checkAppKeySetup();
 
-        btnLogin = (Button) findViewById(R.id.login_button);
+        Button btnLogin = (Button) findViewById(R.id.login_button);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,20 +58,20 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here
-        int id = item.getItemId();
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here
+//        int id = item.getItemId();
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     protected void onResume() {

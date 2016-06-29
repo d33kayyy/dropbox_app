@@ -4,10 +4,10 @@
     <dimen name="activity_vertical_margin">5dp</dimen>
     <dimen name="padding_under">10dp</dimen>
     <dimen name="fab_margin">1dp</dimen>
-    <dimen name="padding">3dip</dimen>
+    <dimen name="padding">3dp</dimen>
     <dimen name="space">10dp</dimen>
-    <dimen name="login_btn_width">150dp</dimen>
+    <dimen name="thumb_size">36dp</dimen>
     <dimen name="txtSize">18sp</dimen>
     <dimen name="hi">40sp</dimen>
-    <dimen name="created">13sp</dimen>
+    <dimen name="created">12sp</dimen>
 </resources>

@@ -337,7 +337,6 @@ public class HomeScreen extends AppCompatActivity {
                 "AppPreferences", Context.MODE_PRIVATE);
         String layout = sharedPref.getString("Layout", "Grid");
 
-        System.out.println("================= + " + layout);
         if (layout.equals("List")) {
             listView.setVisibility(View.VISIBLE);
             gridView.setVisibility(View.GONE);

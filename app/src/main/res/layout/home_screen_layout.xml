@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/backGround"
     android:orientation="vertical"
-    tools:context="com.dk.dropbox.HomeScreen">
+    tools:context=".HomeScreen">
 
     <!--<include-->
         <!--android:id="@+id/tool_bar"-->
