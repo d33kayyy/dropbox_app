@@ -22,5 +22,5 @@
         android:layout_marginStart="@dimen/space"
         android:layout_toEndOf="@+id/thumbnail"
         android:fontFamily="sans-serif"
-        android:textColor="@color/white" />
+        android:textColor="@color/primary_text" />
 </RelativeLayout>
