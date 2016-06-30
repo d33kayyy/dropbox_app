@@ -31,11 +31,12 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
         if (convertView == null) {
-            view = inflater.inflate(R.layout.list_row, parent, false);
+            view = inflater.inflate(R.layout.item, parent, false);
 
             holder = new ViewHolder();
-            holder.fileName = (TextView) view.findViewById(R.id.file);
-            holder.imageView = (ImageView) view.findViewById(R.id.thumbnail);
+            holder.fileName = (TextView) view.findViewById(R.id.prim_text);
+            holder.imageView = (ImageView) view.findViewById(R.id.item_image);
+            holder.fileSize = (TextView) view.findViewById(R.id.sec_text);
 
             view.setTag(holder);
 
@@ -44,6 +45,12 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
         }
 
         holder.fileName.setText(file.fileName());
+        if (!file.isDir) {
+            String info = file.size + " - " + file.modified.substring(5,16);
+            holder.fileSize.setText(info);
+        } else {
+            holder.fileSize.setText(file.modified.substring(5,16));
+        }
 
         // Display icon
 
@@ -71,14 +78,13 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
                             holder.imageView.setImageResource(R.drawable.ic_audiotrack_grey_600_36dp);
                             break;
                         default:
-                            holder.imageView.setImageResource(R.drawable.ic_help_outline_grey_600_36dp);
+                            holder.imageView.setImageResource(R.drawable.ic_help_outline_grey_500_24dp);
                             break;
                     }
                 } else {
-                    holder.imageView.setImageResource(R.drawable.ic_help_outline_grey_600_36dp);
+                    holder.imageView.setImageResource(R.drawable.ic_help_outline_grey_500_24dp);
                 }
             }
-
         }
 
         return view;
@@ -88,5 +94,6 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
     private class ViewHolder {
         ImageView imageView;
         TextView fileName;
+        TextView fileSize;
     }
 }

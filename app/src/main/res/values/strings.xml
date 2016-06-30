@@ -22,4 +22,5 @@
     <string name="action_upload">Upload</string>
     <string name="action_layout">Lay out</string>
     <string name="action_logout">Log out</string>
+    <string name="item_image">item</string>
 </resources>

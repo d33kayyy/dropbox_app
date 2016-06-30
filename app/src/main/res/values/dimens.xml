@@ -10,4 +10,9 @@
     <dimen name="txtSize">18sp</dimen>
     <dimen name="hi">40sp</dimen>
     <dimen name="created">12sp</dimen>
+
+    <dimen name="left_margin">16dp</dimen>
+    <dimen name="right_margin">16dp</dimen>
+    <dimen name="primary_txt_size">16sp</dimen>
+    <dimen name="secondary_txt_size">14sp</dimen>
 </resources>
