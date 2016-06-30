@@ -7,9 +7,9 @@
     android:orientation="vertical"
     tools:context=".HomeScreen">
 
-    <!--<include-->
-        <!--android:id="@+id/tool_bar"-->
-        <!--layout="@layout/tool_bar" />-->
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar" />
 
     <ListView
         android:id="@+id/listView"

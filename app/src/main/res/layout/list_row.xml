@@ -13,7 +13,7 @@
         android:layout_centerVertical="true"
         android:contentDescription="@string/app_name"
         android:padding="@dimen/padding"
-        android:scaleType="fitXY" />
+        android:scaleType="fitCenter" />
 
     <TextView
         android:id="@+id/file"
