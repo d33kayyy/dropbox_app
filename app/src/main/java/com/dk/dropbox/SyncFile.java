@@ -55,8 +55,17 @@ public class SyncFile extends AsyncTask<Void, Void, ArrayList<Entry>> {
     protected void onPostExecute(ArrayList<Entry> listFile) {
         if (listFile != null) {
             adapter.clear();
-            for (Entry item : listFile)
-                adapter.add(item);
+
+            // Display folder first
+            for (Entry item : listFile) {
+                if (item.isDir)
+                    adapter.add(item);
+            }
+
+            for (Entry item : listFile) {
+                if (!item.isDir)
+                    adapter.add(item);
+            }
         }
         dialog.dismiss();
     }

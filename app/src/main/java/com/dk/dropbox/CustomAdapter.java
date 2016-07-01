@@ -2,6 +2,10 @@ package com.dk.dropbox;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,10 +50,10 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
 
         holder.fileName.setText(file.fileName());
         if (!file.isDir) {
-            String info = file.size + " - " + file.modified.substring(5,16);
+            String info = file.size + " - " + file.modified.substring(5, 16);
             holder.fileSize.setText(info);
         } else {
-            holder.fileSize.setText(file.modified.substring(5,16));
+            holder.fileSize.setText(file.modified.substring(5, 16));
         }
 
         // Display icon
@@ -69,7 +73,12 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
 
                     switch (fileType) {
                         case ".txt":
-                            holder.imageView.setImageResource(R.drawable.ic_description_grey_600_36dp);
+                            Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
+                                    R.drawable.ic_description_grey_600_36dp);
+
+                            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), icon);
+                            drawable.setCircular(true);
+                            holder.imageView.setImageDrawable(drawable);
                             break;
                         case ".zip":
                             holder.imageView.setImageResource(R.drawable.ic_archive_grey_600_36dp);
