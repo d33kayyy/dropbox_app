@@ -3,7 +3,13 @@ package com.dk.dropbox;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
@@ -63,7 +69,8 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
             getThumbnail.execute();
         } else {
             if (file.isDir) {
-                holder.imageView.setImageResource(R.drawable.ic_folder_open_grey_600_36dp);
+                holder.imageView.setBackground(getRoundedBackground(169, 169, 169));
+                holder.imageView.setImageResource(R.drawable.ic_folder_white_24dp);
             } else {
 
                 int index = file.fileName().lastIndexOf(".");
@@ -73,30 +80,64 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
 
                     switch (fileType) {
                         case ".txt":
-                            Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
-                                    R.drawable.ic_description_grey_600_36dp);
-
-                            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), icon);
-                            drawable.setCircular(true);
-                            holder.imageView.setImageDrawable(drawable);
+                        case ".doc":
+                        case ".docx":
+                            holder.imageView.setBackground(getRoundedBackground(30,144,255));
+                            holder.imageView.setImageResource(R.drawable.ic_description_white_36dp);
                             break;
                         case ".zip":
-                            holder.imageView.setImageResource(R.drawable.ic_archive_grey_600_36dp);
+                        case ".rar":
+                        case ".7z":
+                            holder.imageView.setBackground(getRoundedBackground(50,205,50));
+                            holder.imageView.setImageResource(R.drawable.ic_archive_white_36dp);
                             break;
                         case ".mp3":
-                            holder.imageView.setImageResource(R.drawable.ic_audiotrack_grey_600_36dp);
+                        case ".m4a":
+                        case ".wav":
+                        case ".flac":
+                            holder.imageView.setBackground(getRoundedBackground(255,215,0));
+                            holder.imageView.setImageResource(R.drawable.ic_audiotrack_white_36dp);
+                            break;
+                        case ".py":
+                        case ".c":
+                        case ".java":
+                            holder.imageView.setBackground(getRoundedBackground(255, 0, 0));
+                            holder.imageView.setImageResource(R.drawable.ic_code_white_36dp);
+                            break;
+                        case ".pdf":
+                            holder.imageView.setBackground(getRoundedBackground(255, 0, 0));
+                            holder.imageView.setImageResource(R.mipmap.pdf);
                             break;
                         default:
-                            holder.imageView.setImageResource(R.drawable.ic_help_outline_grey_500_24dp);
+                            holder.imageView.setBackground(getRoundedBackground(138,43,226));
+                            holder.imageView.setImageResource(R.drawable.ic_help_outline_white_36dp);
                             break;
                     }
                 } else {
-                    holder.imageView.setImageResource(R.drawable.ic_help_outline_grey_500_24dp);
+                    holder.imageView.setBackground(getRoundedBackground(138,43,226));
+                    holder.imageView.setImageResource(R.drawable.ic_help_outline_white_36dp);
                 }
             }
         }
 
         return view;
+    }
+
+    // Create a circle drawable that can be used as background
+    private Drawable getRoundedBackground(int r, int g, int b){
+        Paint p = new Paint();
+        p.setAntiAlias(true);
+        p.setFilterBitmap(true);
+
+        Bitmap bitmap = Bitmap.createBitmap(40, 40, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawRGB(r, g, b);
+
+        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
+        drawable.setCircular(true);
+
+        return drawable;
     }
 
     /*private view holder class*/

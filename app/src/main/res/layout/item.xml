@@ -10,10 +10,10 @@
         android:layout_width="@dimen/thumb_size"
         android:layout_height="@dimen/thumb_size"
         android:layout_centerVertical="true"
+        android:padding="9dp"
         android:layout_marginLeft="@dimen/left_margin"
         android:layout_marginRight="@dimen/right_margin"
-        android:contentDescription="@string/item_image"
-        android:scaleType="fitXY" />
+        android:contentDescription="@string/item_image" />
 
     <LinearLayout
         android:layout_width="match_parent"

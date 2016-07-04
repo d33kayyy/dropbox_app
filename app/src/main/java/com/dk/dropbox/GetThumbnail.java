@@ -3,6 +3,7 @@ package com.dk.dropbox;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -67,9 +68,18 @@ public class GetThumbnail extends AsyncTask<Void, Void, Boolean> {
         if (result) {
             RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), thumbnail);
             drawable.setCircular(true);
-            view.setImageDrawable(drawable);
+            view.setBackground(drawable);
         } else {
-            view.setImageResource(R.drawable.ic_image_grey_600_36dp);
+            Bitmap bitmap = Bitmap.createBitmap(40, 40, Bitmap.Config.ARGB_8888);
+
+            Canvas canvas = new Canvas(bitmap);
+            canvas.drawRGB(222, 184, 135);
+
+            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
+            drawable.setCircular(true);
+
+            view.setBackground(drawable);
+            view.setImageResource(R.drawable.ic_photo_white_36dp);
         }
     }
 }
