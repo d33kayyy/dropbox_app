@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.DropboxAPI.Entry;
@@ -29,8 +30,9 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
         this.context = context;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
         Entry file = getItem(position);
         View view = convertView;
 
@@ -40,10 +42,16 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
             view = inflater.inflate(R.layout.item, parent, false);
 
             holder = new ViewHolder();
-            holder.fileName = (TextView) view.findViewById(R.id.prim_text);
             holder.imageView = (ImageView) view.findViewById(R.id.item_image);
+            holder.fileName = (TextView) view.findViewById(R.id.prim_text);
             holder.fileSize = (TextView) view.findViewById(R.id.sec_text);
-
+            holder.imgBtn = (ImageView) view.findViewById(R.id.img_btn);
+            holder.imgBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(context, "Button" + position + " clicked", Toast.LENGTH_LONG).show();
+                }
+            });
             view.setTag(holder);
 
         } else {
@@ -53,8 +61,8 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
         // Display name
         String name = file.fileName();
         int len = file.fileName().length();
-        if (len > 18){
-            name = file.fileName().substring(0, 10) + "..." + file.fileName().substring(len-8);
+        if (len > 18) {
+            name = file.fileName().substring(0, 10) + "..." + file.fileName().substring(len - 8);
         }
         holder.fileName.setText(name);
 
@@ -149,5 +157,6 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
         ImageView imageView;
         TextView fileName;
         TextView fileSize;
+        ImageView imgBtn;
     }
 }
