@@ -69,7 +69,7 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
             getThumbnail.execute();
         } else {
             if (file.isDir) {
-                holder.imageView.setBackground(getRoundedBackground(169, 169, 169));
+                holder.imageView.setBackground(getRoundedBackground(192, 192, 192));
                 holder.imageView.setImageResource(R.drawable.ic_folder_white_24dp);
             } else {
 
@@ -82,20 +82,20 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
                         case ".txt":
                         case ".doc":
                         case ".docx":
-                            holder.imageView.setBackground(getRoundedBackground(30,144,255));
+                            holder.imageView.setBackground(getRoundedBackground(30, 144, 255));
                             holder.imageView.setImageResource(R.drawable.ic_description_white_36dp);
                             break;
                         case ".zip":
                         case ".rar":
                         case ".7z":
-                            holder.imageView.setBackground(getRoundedBackground(50,205,50));
+                            holder.imageView.setBackground(getRoundedBackground(50, 205, 50));
                             holder.imageView.setImageResource(R.drawable.ic_archive_white_36dp);
                             break;
                         case ".mp3":
                         case ".m4a":
                         case ".wav":
                         case ".flac":
-                            holder.imageView.setBackground(getRoundedBackground(255,215,0));
+                            holder.imageView.setBackground(getRoundedBackground(255, 215, 0));
                             holder.imageView.setImageResource(R.drawable.ic_audiotrack_white_36dp);
                             break;
                         case ".py":
@@ -109,12 +109,12 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
                             holder.imageView.setImageResource(R.mipmap.pdf);
                             break;
                         default:
-                            holder.imageView.setBackground(getRoundedBackground(138,43,226));
+                            holder.imageView.setBackground(getRoundedBackground(138, 43, 226));
                             holder.imageView.setImageResource(R.drawable.ic_help_outline_white_36dp);
                             break;
                     }
                 } else {
-                    holder.imageView.setBackground(getRoundedBackground(138,43,226));
+                    holder.imageView.setBackground(getRoundedBackground(138, 43, 226));
                     holder.imageView.setImageResource(R.drawable.ic_help_outline_white_36dp);
                 }
             }
@@ -124,7 +124,7 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
     }
 
     // Create a circle drawable that can be used as background
-    private Drawable getRoundedBackground(int r, int g, int b){
+    private Drawable getRoundedBackground(int r, int g, int b) {
         Paint p = new Paint();
         p.setAntiAlias(true);
         p.setFilterBitmap(true);
