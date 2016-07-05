@@ -11,8 +11,8 @@
         android:layout_height="@dimen/thumb_size"
         android:layout_centerVertical="true"
         android:padding="7dp"
-        android:layout_marginLeft="@dimen/left_margin"
-        android:layout_marginRight="@dimen/right_margin"
+        android:layout_marginLeft="@dimen/item_margin"
+        android:layout_marginRight="@dimen/item_margin"
         android:contentDescription="@string/item_image" />
 
     <LinearLayout
@@ -46,11 +46,12 @@
 
     <ImageView
         android:id="@+id/icon_imageview"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="@dimen/right_icon"
+        android:layout_height="@dimen/right_icon"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="16dp"
+        android:layout_marginRight="@dimen/item_margin"
+        android:layout_marginLeft="@dimen/item_margin"
         android:contentDescription="imageview_description_user_status"
-        android:src="@drawable/ic_open_context_menu" />
+        android:src="@drawable/ic_info_grey_400_24dp" />
 </RelativeLayout>

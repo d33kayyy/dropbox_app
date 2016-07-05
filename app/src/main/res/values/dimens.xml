@@ -13,9 +13,9 @@
     <dimen name="created">12sp</dimen>
 
     <dimen name="thumb_size">40dp</dimen>
-    <dimen name="left_margin">16dp</dimen>
-    <dimen name="right_margin">16dp</dimen>
+    <dimen name="item_margin">16dp</dimen>
+    <dimen name="right_icon">18dp</dimen>
     <dimen name="primary_txt_size">16sp</dimen>
-    <dimen name="secondary_txt_size">14sp</dimen>
+    <dimen name="secondary_txt_size">13sp</dimen>
 
 </resources>

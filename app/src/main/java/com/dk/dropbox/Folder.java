@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
@@ -55,6 +56,10 @@ public class Folder extends AppCompatActivity {
 
     private Toolbar toolbar;
 
+    public void back() {
+        NavUtils.navigateUpFromSameTask(this);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +67,16 @@ public class Folder extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        toolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                back();
+            }
+        });
+
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Get folder name from HomeScreen
         Intent intent = this.getIntent();

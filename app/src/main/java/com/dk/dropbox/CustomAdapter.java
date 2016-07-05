@@ -5,10 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -54,7 +50,15 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
             holder = (ViewHolder) view.getTag();
         }
 
-        holder.fileName.setText(file.fileName());
+        // Display name
+        String name = file.fileName();
+        int len = file.fileName().length();
+        if (len > 18){
+            name = file.fileName().substring(0, 10) + "..." + file.fileName().substring(len-8);
+        }
+        holder.fileName.setText(name);
+
+        // Display info
         if (!file.isDir) {
             String info = file.size + " - " + file.modified.substring(5, 16);
             holder.fileSize.setText(info);
