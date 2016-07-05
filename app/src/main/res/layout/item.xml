@@ -53,5 +53,5 @@
         android:layout_marginRight="@dimen/item_margin"
         android:layout_marginLeft="@dimen/item_margin"
         android:contentDescription="imageview_description_user_status"
-        android:src="@drawable/ic_info_grey_400_24dp" />
+        android:src="@drawable/ic_add_circle_grey_400_24dp" />
 </RelativeLayout>

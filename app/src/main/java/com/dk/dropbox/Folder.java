@@ -364,16 +364,6 @@ public class Folder extends AppCompatActivity {
         renameFile.execute();
     }
 
-    private void changeLayout() {
-        if (gridView.getVisibility() == View.VISIBLE) {
-            listView.setVisibility(View.VISIBLE);
-            gridView.setVisibility(View.GONE);
-        } else {
-            listView.setVisibility(View.GONE);
-            gridView.setVisibility(View.VISIBLE);
-        }
-    }
-
     private void showFileChooser() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");

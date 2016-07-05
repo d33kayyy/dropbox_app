@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Dropbox</string>
 
-    <string name="login">Log in</string>
+    <string name="login">Sign in</string>
     <string name="hi">Hi!</string>
     <string name="welcome">Shall we start now?</string>
     <string name="created">created by dK</string>

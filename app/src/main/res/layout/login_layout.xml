@@ -30,6 +30,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:text="@string/hi"
+        android:textStyle="bold"
         android:textColor="@color/white"
         android:textSize="@dimen/hi" />
 
