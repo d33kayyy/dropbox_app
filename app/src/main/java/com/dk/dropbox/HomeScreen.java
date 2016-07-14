@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -94,8 +95,8 @@ public class HomeScreen extends AppCompatActivity {
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new ItemClickListener());
 
-        registerForContextMenu(gridView);
-        registerForContextMenu(listView);
+//        registerForContextMenu(gridView);
+//        registerForContextMenu(listView);
 
         sync();
     }
@@ -181,130 +182,6 @@ public class HomeScreen extends AppCompatActivity {
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.context_menu, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-
-        entry = adapter.getItem(info.position);
-        fileSelected = entry.fileName();
-
-        input = new EditText(this);
-        input.setTextColor(Color.BLACK);
-
-        editFile = new EditText(this);
-        editFile.setTextColor(Color.BLACK);
-
-        switch (item.getItemId()) {
-            case R.id.edit:
-
-                if (fileSelected.contains(".txt")) {
-                    OpenFile openFile = new OpenFile(dropboxAPI, PATH, fileSelected, editFile);
-                    openFile.execute();
-
-                    new AlertDialog.Builder(this)
-                            .setView(editFile)
-                            .setMessage(fileSelected)
-                            .setCancelable(false)
-                            .setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    String newContent = editFile.getText().toString();
-                                    File file = new File(getApplicationContext().getFilesDir(), fileSelected);
-                                    try {
-                                        FileWriter fileWriter = new FileWriter(file);
-                                        fileWriter.write(newContent);
-                                        fileWriter.close();
-
-                                        OverWriteFile overWr = new OverWriteFile(getApplicationContext(), dropboxAPI, PATH, file.getPath());
-                                        overWr.execute();
-
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            })
-                            .setNegativeButton("Cancel", null)
-                            .show();
-                } else {
-                    showToast("Cannot edit this file");
-                }
-                return true;
-
-            case R.id.rename:
-
-                input.setText(fileSelected);
-                new AlertDialog.Builder(this)
-                        .setView(input)
-                        .setMessage("Enter the new file name")
-                        .setCancelable(false)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                newName = input.getText().toString();
-                                if (!newName.equals("")) {
-                                    rename();
-                                }
-                            }
-                        })
-                        .setNegativeButton("No", null)
-                        .show();
-                return true;
-
-            case R.id.move:
-
-                showFolders();
-
-                new AlertDialog.Builder(this)
-                        .setTitle("Select Folder")
-                        .setCancelable(true)
-                        .setNegativeButton("Cancel", null)
-                        .setSingleChoiceItems(folders, 0, null)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.dismiss();
-                                int position = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-                                newPath = folders[position];
-                                move();
-
-                            }
-                        })
-                        .show();
-                return true;
-
-            case R.id.delete:
-
-                new AlertDialog.Builder(this)
-                        .setMessage("Are you sure you want to delete " + fileSelected + " ?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                delete(entry.path);
-                            }
-                        })
-                        .setNegativeButton("No", null)
-                        .show();
-                return true;
-
-            case R.id.download:
-
-                if (!entry.isDir) {
-                    DownloadFile downloadFile = new DownloadFile(this, dropboxAPI, entry);
-                    downloadFile.execute();
-                } else {
-                    showToast("Folder download unavailable");
-                }
-                return true;
-
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FILE_SELECT_CODE) {
@@ -363,40 +240,12 @@ public class HomeScreen extends AppCompatActivity {
         uploadFile.execute();
     }
 
-    private void delete(String path) {
-        DeleteFile deleteFile = new DeleteFile(this, dropboxAPI, path);
-        deleteFile.execute();
-    }
-
-    private void move() {
-        MoveFile moveFile = new MoveFile(this, dropboxAPI, PATH, newPath, fileSelected);
-        moveFile.execute();
-    }
-
-    private void rename() {
-        RenameFile renameFile = new RenameFile(this, dropboxAPI, PATH, fileSelected, newName);
-        renameFile.execute();
-    }
-
     private void showFileChooser() {
         // Create an intent to choose file from storage
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(Intent.createChooser(intent, "Select a file to Upload"), 0);
-    }
-
-    private void showFolders() {
-        listFolder.clear();
-
-        ListFolder listOfFolder = new ListFolder(dropboxAPI, PATH, listFolder);
-        try {
-            // get list of folder
-            listOfFolder.execute().get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        folders = listFolder.toArray(new String[listFolder.size()]);
     }
 
     private void logOut() {
@@ -524,11 +373,6 @@ public class HomeScreen extends AppCompatActivity {
     }
 
     /*========================== Methods from DropBox API SDK ====================================*/
-
-    private void showToast(String msg) {
-        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_LONG);
-        toast.show();
-    }
 
     private void clearKeys() {
         SharedPreferences prefs = getSharedPreferences(ACCOUNT_PREFS_NAME, 0);
