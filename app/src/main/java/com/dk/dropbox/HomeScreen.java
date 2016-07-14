@@ -7,7 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Color;
+
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,19 +15,14 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.PopupMenu;
+
 import android.support.v7.widget.Toolbar;
-import android.view.ContextMenu;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.DropboxAPI.Entry;
@@ -35,11 +30,7 @@ import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.AppKeyPair;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 public class HomeScreen extends AppCompatActivity {
     // APP SETUP
@@ -56,14 +47,10 @@ public class HomeScreen extends AppCompatActivity {
     // Variables
     private static DropboxAPI<AndroidAuthSession> dropboxAPI;
     private ArrayList<Entry> listFile;
-    private ArrayList<String> listFolder = new ArrayList<String>();
     private GridView gridView;
     private ListView listView;
-    private EditText input, editFile;
-    private String fileSelected, newPath, newName, filePath;
-    private String[] folders;
+    private String filePath;
     private CustomAdapter adapter;
-    private Entry entry;
 
     Toolbar toolbar;
 

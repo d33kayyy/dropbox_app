@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,26 +16,18 @@ import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.ContextMenu;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.DropboxAPI.Entry;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 public class Folder extends AppCompatActivity {
     private static final String PATH = "/";
@@ -45,14 +36,10 @@ public class Folder extends AppCompatActivity {
     // Variables
     private DropboxAPI dropboxAPI = HomeScreen.getDropboxAPI();
     private ArrayList<Entry> listFile;
-    private ArrayList<String> listFolder = new ArrayList<String>();
     private ArrayAdapter<Entry> adapter;
     private ListView listView;
     private GridView gridView;
-    private EditText input, editFile;
-    private String folderName, folderPath, fileSelected, newPath, newName, filePath;
-    private String[] folders;
-    private Entry entry;
+    private String folderName, folderPath, filePath;
 
     private Toolbar toolbar;
 
@@ -186,129 +173,6 @@ public class Folder extends AppCompatActivity {
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.context_menu, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        entry = adapter.getItem(info.position);
-        fileSelected = entry.fileName();
-
-        input = new EditText(this);
-        input.setTextColor(Color.BLACK);
-
-        editFile = new EditText(this);
-        editFile.setTextColor(Color.BLACK);
-
-        switch (item.getItemId()) {
-            case R.id.edit:
-
-                if (fileSelected.contains(".txt")) {
-                    OpenFile openFile = new OpenFile(dropboxAPI, folderPath, fileSelected, editFile);
-                    openFile.execute();
-
-                    new AlertDialog.Builder(this)
-                            .setView(editFile)
-                            .setMessage(fileSelected)
-                            .setCancelable(false)
-                            .setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    String newContent = editFile.getText().toString();
-                                    File file = new File(getApplicationContext().getFilesDir(), fileSelected);
-                                    try {
-                                        FileWriter fileWriter = new FileWriter(file);
-                                        fileWriter.write(newContent);
-                                        fileWriter.close();
-
-                                        OverWriteFile overWr = new OverWriteFile(getApplicationContext(), dropboxAPI, folderPath, file.getPath());
-                                        overWr.execute();
-
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            })
-                            .setNegativeButton("Cancel", null)
-                            .show();
-                } else {
-                    showToast("Cannot edit this file");
-                }
-                return true;
-
-            case R.id.rename:
-
-                input.setText(fileSelected);
-                new AlertDialog.Builder(this)
-                        .setView(input)
-                        .setMessage("Enter the new file name")
-                        .setCancelable(false)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                newName = input.getText().toString();
-                                if (!newName.equals("")) {
-                                    rename();
-                                }
-                            }
-                        })
-                        .setNegativeButton("No", null)
-                        .show();
-                return true;
-
-            case R.id.move:
-
-                showFolders();
-
-                new AlertDialog.Builder(this)
-                        .setTitle("Select Folder")
-                        .setCancelable(true)
-                        .setNegativeButton("Cancel", null)
-                        .setSingleChoiceItems(folders, 0, null)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.dismiss();
-                                int position = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-                                newPath = folders[position];
-                                move();
-                            }
-                        })
-                        .show();
-                return true;
-
-            case R.id.delete:
-
-                new AlertDialog.Builder(this)
-                        .setMessage("Are you sure you want to delete " + fileSelected + " ?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                delete(entry.path);
-                            }
-                        })
-                        .setNegativeButton("No", null)
-                        .show();
-                return true;
-
-            case R.id.download:
-
-                if ((fileSelected.substring(fileSelected.length() - 4)).contains(".")) {
-                    DownloadFile downloadFile = new DownloadFile(this, dropboxAPI, entry);
-                    downloadFile.execute();
-                } else {
-                    showToast("Folder download unavailable");
-                }
-
-                return true;
-
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FILE_SELECT_CODE) {
@@ -349,43 +213,11 @@ public class Folder extends AppCompatActivity {
         uploadFile.execute();
     }
 
-    private void delete(String path) {
-        DeleteFile deleteFile = new DeleteFile(this, dropboxAPI, path);
-        deleteFile.execute();
-    }
-
-    private void move() {
-        MoveFile moveFile = new MoveFile(this, dropboxAPI, folderPath, newPath, fileSelected);
-        moveFile.execute();
-    }
-
-    private void rename() {
-        RenameFile renameFile = new RenameFile(this, dropboxAPI, folderPath, fileSelected, newName);
-        renameFile.execute();
-    }
-
     private void showFileChooser() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(Intent.createChooser(intent, "Select a file to Upload"), 0);
-    }
-
-    private void showFolders() {
-        listFolder.clear();
-        listFolder.add("/"); // root
-
-        ListFolder listOfFolder = new ListFolder(dropboxAPI, PATH, listFolder);
-        try {
-            // get list of parent folder
-            listOfFolder.execute().get();
-            // get list of subfolder
-            listOfFolder = new ListFolder(dropboxAPI, folderPath, listFolder);
-            listOfFolder.execute().get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        folders = listFolder.toArray(new String[listFolder.size()]);
     }
 
     private void logOut() {
@@ -403,10 +235,6 @@ public class Folder extends AppCompatActivity {
         finish();
     }
 
-    private void showToast(String msg) {
-        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_LONG);
-        toast.show();
-    }
 
     /*============= Handle Uri to get file path to upload (from StackOverFlow) ====================*/
 

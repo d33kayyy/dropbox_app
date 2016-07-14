@@ -35,13 +35,13 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class CustomAdapter extends ArrayAdapter<Entry> {
-    private static final String PATH = "/"; // Set this as the root folder
+    private static final String PATH = "/"; // Root folder
 
     private ArrayList<String> listFolder = new ArrayList<String>();
     private Context context;
     private DropboxAPI dropboxAPI = HomeScreen.getDropboxAPI();
     private Entry entry;
-    private String fileSelected, newPath, newName, filePath;
+    private String fileSelected, newPath, newName;
     private EditText input, editFile;
     private String[] folders;
 
@@ -134,7 +134,7 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
                                                 public void onClick(DialogInterface dialog, int id) {
                                                     newName = input.getText().toString();
                                                     if (!newName.equals("")) {
-                                                        rename();
+                                                        rename(entry.path);
                                                     }
                                                 }
                                             })
@@ -144,7 +144,7 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
 
                                 case R.id.move:
 
-                                    showFolders();
+                                    showFolders(entry.parentPath());
 
                                     new AlertDialog.Builder(context)
                                             .setTitle("Select Folder")
@@ -156,8 +156,7 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
                                                     dialog.dismiss();
                                                     int position = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
                                                     newPath = folders[position];
-                                                    move();
-
+                                                    move(entry.path);
                                                 }
                                             })
                                             .show();
@@ -309,26 +308,40 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
         deleteFile.execute();
     }
 
-    private void move() {
-        MoveFile moveFile = new MoveFile(context, dropboxAPI, PATH, newPath, fileSelected);
+    private void move(String path) {
+        MoveFile moveFile = new MoveFile(context, dropboxAPI, path, newPath, fileSelected);
         moveFile.execute();
     }
 
-    private void rename() {
-        RenameFile renameFile = new RenameFile(context, dropboxAPI, PATH, fileSelected, newName);
+    private void rename(String path) {
+        RenameFile renameFile = new RenameFile(context, dropboxAPI, path, fileSelected, newName);
         renameFile.execute();
     }
 
-    private void showFolders() { // TODO: Show path of all related
+    private void showFolders(String path) { // TODO: Show path of all related
         listFolder.clear();
+
+        // if the current path is not root, add root
+        if (!path.equals("/")) {
+            listFolder.add("/");
+        }
 
         ListFolder listOfFolder = new ListFolder(dropboxAPI, PATH, listFolder);
         try {
             // get list of folder
             listOfFolder.execute().get();
+            if (!path.equals("/")) {
+                listOfFolder = new ListFolder(dropboxAPI, path, listFolder);
+                listOfFolder.execute().get();
+            }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+
+        // Remove the current folder
+        String current = path.substring(0, path.length() - 1);
+        listFolder.remove(current);
+
         folders = listFolder.toArray(new String[listFolder.size()]);
     }
 
