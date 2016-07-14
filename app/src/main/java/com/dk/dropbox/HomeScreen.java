@@ -82,9 +82,6 @@ public class HomeScreen extends AppCompatActivity {
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new ItemClickListener());
 
-//        registerForContextMenu(gridView);
-//        registerForContextMenu(listView);
-
         sync();
     }
 

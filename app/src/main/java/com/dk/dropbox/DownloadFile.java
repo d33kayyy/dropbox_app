@@ -54,7 +54,7 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
 
         try {
             outputStream = new FileOutputStream(file);
-            DropboxFileInfo download = dropboxAPI.getFile(entry.path, null, outputStream, new ProgressListener() {
+            dropboxAPI.getFile(entry.path, null, outputStream, new ProgressListener() {
                 @Override
                 public long progressInterval() {
                     // Update the progress bar every half-second or so

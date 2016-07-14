@@ -6,20 +6,21 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.DropboxAPI.Entry;
 import com.dropbox.client2.exception.DropboxException;
 
 public class RenameFile extends AsyncTask<Void, Void, Boolean> {
     private DropboxAPI dropboxAPI;
-    private String path, fileName, newName;
+    private String newName;
+    private Entry entry;
     private Context context;
     private ProgressDialog dialog;
 
-    public RenameFile(Context context, DropboxAPI dropboxAPI, String path, String fileName, String newName) {
+    public RenameFile(Context context, DropboxAPI dropboxAPI, Entry entry, String newName) {
         this.context = context.getApplicationContext();
         this.dropboxAPI = dropboxAPI;
-        this.path = path;
+        this.entry = entry;
         this.newName = newName;
-        this.fileName = fileName;
         dialog = new ProgressDialog(context);
         dialog.setMessage("Renaming File");
         dialog.show();
@@ -28,7 +29,7 @@ public class RenameFile extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... params) {
         try {
-            dropboxAPI.move(path + fileName, path + newName);
+            dropboxAPI.move(entry.path, entry.parentPath() + newName);
             return true;
         } catch (DropboxException e) {
             e.printStackTrace();

@@ -6,22 +6,23 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.DropboxAPI.Entry;
 import com.dropbox.client2.exception.DropboxException;
 
 public class MoveFile extends AsyncTask<Void, Void, Boolean> {
     private static final String PATH = "/";
 
     private DropboxAPI dropboxAPI;
-    private String path, fileName, newPath;
+    private String newPath;
+    private Entry entry;
     private Context context;
     private ProgressDialog dialog;
 
-    public MoveFile(Context context, DropboxAPI dropboxAPI, String path, String newPath, String fileName) {
+    public MoveFile(Context context, DropboxAPI dropboxAPI, Entry entry, String newPath) {
         this.context = context.getApplicationContext();
         this.dropboxAPI = dropboxAPI;
-        this.path = path;
+        this.entry = entry;
         this.newPath = newPath;
-        this.fileName = fileName;
         dialog = new ProgressDialog(context);
         dialog.setMessage("Moving File");
         dialog.show();
@@ -30,7 +31,7 @@ public class MoveFile extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... params) {
         try {
-            dropboxAPI.move(path + fileName, PATH + newPath + "/" + fileName);
+            dropboxAPI.move(entry.path, newPath + "/" + entry.fileName());
             return true;
         } catch (DropboxException e) {
             e.printStackTrace();
@@ -42,7 +43,7 @@ public class MoveFile extends AsyncTask<Void, Void, Boolean> {
     protected void onPostExecute(Boolean result) {
         dialog.dismiss();
         if (result) {
-            Toast.makeText(context, fileName + " has been moved!", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "File has been moved!", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(context, "Error occurred while processing the move request",
                     Toast.LENGTH_LONG).show();

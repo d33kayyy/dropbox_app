@@ -91,7 +91,7 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
                             switch (item.getItemId()) {
                                 case R.id.edit:
 
-                                    if (fileSelected.contains(".txt")) {
+                                    if (fileSelected.endsWith(".txt")) {
                                         OpenFile openFile = new OpenFile(dropboxAPI, PATH, fileSelected, editFile);
                                         openFile.execute();
 
@@ -134,7 +134,7 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
                                                 public void onClick(DialogInterface dialog, int id) {
                                                     newName = input.getText().toString();
                                                     if (!newName.equals("")) {
-                                                        rename(entry.path);
+                                                        rename(entry);
                                                     }
                                                 }
                                             })
@@ -156,7 +156,7 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
                                                     dialog.dismiss();
                                                     int position = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
                                                     newPath = folders[position];
-                                                    move(entry.path);
+                                                    move(entry);
                                                 }
                                             })
                                             .show();
@@ -191,10 +191,9 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
                             }
                         }
                     });
-
-
                 }
             });
+
             view.setTag(holder);
 
         } else {
@@ -260,7 +259,7 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
                             holder.imageView.setImageResource(R.drawable.ic_code_white_36dp);
                             break;
                         case ".pdf":
-                            holder.imageView.setBackground(getRoundedBackground(255, 0, 0));
+                            holder.imageView.setBackground(getRoundedBackground(220, 20, 60));
                             holder.imageView.setImageResource(R.mipmap.pdf);
                             break;
                         default:
@@ -295,7 +294,7 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
         return drawable;
     }
 
-    /*private view holder class*/
+    /* private view holder class */
     private class ViewHolder {
         ImageView imageView;
         TextView fileName;
@@ -308,17 +307,17 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
         deleteFile.execute();
     }
 
-    private void move(String path) {
-        MoveFile moveFile = new MoveFile(context, dropboxAPI, path, newPath, fileSelected);
+    private void move(Entry entry) {
+        MoveFile moveFile = new MoveFile(context, dropboxAPI, entry, newPath);
         moveFile.execute();
     }
 
-    private void rename(String path) {
-        RenameFile renameFile = new RenameFile(context, dropboxAPI, path, fileSelected, newName);
+    private void rename(Entry entry) {
+        RenameFile renameFile = new RenameFile(context, dropboxAPI, entry, newName);
         renameFile.execute();
     }
 
-    private void showFolders(String path) { // TODO: Show path of all related
+    private void showFolders(String path) {
         listFolder.clear();
 
         // if the current path is not root, add root
